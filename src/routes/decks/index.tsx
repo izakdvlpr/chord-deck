@@ -1,16 +1,31 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import {
+	Link,
+	createFileRoute,
+	useNavigate,
+	useRouterState,
+} from "@tanstack/react-router";
 import { Layers } from "lucide-react";
+import { z } from "zod";
 
 import { listDecks } from "@/lib/server/decks";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/decks/")({
-	loader: () => listDecks(),
+	validateSearch: z.object({ q: z.string().optional() }),
+	loaderDeps: ({ search }) => ({ q: search.q }),
+	loader: ({ deps }) => listDecks({ data: { query: deps.q } }),
 	component: DecksPage,
 });
 
 function DecksPage() {
 	const decks = Route.useLoaderData();
+	const { q } = Route.useSearch();
+	const navigate = useNavigate({ from: Route.fullPath });
+	const isLoading = useRouterState({ select: (state) => state.isLoading });
+	const hasSearch = Boolean(q?.trim());
+	const search = q ?? "";
 
 	return (
 		<div className="flex flex-col gap-6">
@@ -21,9 +36,43 @@ function DecksPage() {
 				</p>
 			</div>
 
-			{decks.length === 0 ? (
+			<Input
+				value={search}
+				onChange={(event) => {
+					void navigate({
+						search: (prev) => ({ ...prev, q: event?.target?.value ?? undefined }),
+						replace: true,
+					});
+				}}
+				placeholder="Buscar deck por nome..."
+				aria-label="Buscar deck por nome"
+			/>
+
+			{decks.length === 0 && !hasSearch ? (
 				<div className="rounded-lg border border-dashed py-16 text-center text-muted-foreground">
 					Nenhum deck ainda.
+				</div>
+			) : isLoading ? (
+				<div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
+					{Array.from({ length: 6 }).map((_, index) => (
+						<Card key={index}>
+							<CardHeader>
+								<div className="flex items-center gap-2">
+									<Skeleton className="size-4 rounded-full" />
+									<Skeleton className="h-5 w-32" />
+								</div>
+							</CardHeader>
+							<CardContent className="space-y-2">
+								<Skeleton className="h-4 w-full" />
+								<Skeleton className="h-4 w-2/3" />
+								<Skeleton className="h-3 w-16" />
+							</CardContent>
+						</Card>
+					))}
+				</div>
+			) : decks.length === 0 ? (
+				<div className="rounded-lg border border-dashed py-16 text-center text-muted-foreground">
+					Nenhum deck encontrado para "{search}".
 				</div>
 			) : (
 				<div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">

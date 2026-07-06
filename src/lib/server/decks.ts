@@ -4,21 +4,38 @@ import { z } from "zod";
 
 import { prisma } from "@/lib/db";
 
-// Public, read-only. Decks are populated via prisma/seed.ts.
-export const listDecks = createServerFn({ method: "GET" }).handler(async () => {
-	return prisma.deck.findMany({
-		include: { _count: { select: { deckChords: true } } },
-		orderBy: { name: "asc" },
+export const listDecks = createServerFn({ method: "GET" })
+	.validator(z.object({ query: z.string().optional() }))
+	.handler(async ({ data }) => {
+		const query = data.query?.trim();
+    
+		return prisma.deck.findMany({
+			where: query
+				? {
+						name: { contains: query, mode: "insensitive" },
+					}
+				: undefined,
+			include: { _count: { select: { deckChords: true } } },
+			orderBy: { name: "asc" },
+		});
 	});
-});
 
 export const getDeck = createServerFn({ method: "GET" })
-	.validator(z.object({ slug: z.string() }))
+	.validator(z.object({ slug: z.string(), query: z.string().optional() }))
 	.handler(async ({ data }) => {
+		const query = data.query?.trim();
+    
 		const deck = await prisma.deck.findUnique({
 			where: { slug: data.slug },
 			include: {
 				deckChords: {
+					where: query
+						? {
+								chord: {
+									name: { contains: query, mode: "insensitive" },
+								},
+							}
+						: undefined,
 					include: {
 						chord: {
 							include: {
@@ -31,6 +48,8 @@ export const getDeck = createServerFn({ method: "GET" })
 				},
 			},
 		});
+    
 		if (!deck) throw notFound();
+    
 		return deck;
 	});
