@@ -1,0 +1,21 @@
+services:
+  postgres:
+    container_name: chord-deck-postgres
+    image: postgres:13
+    restart: always
+    ports:
+      - '42069:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chord-deck
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      
+volumes:
+  postgres-data:
+  
+networks:
+  default:
+    name: chord-deck
+    driver: bridge

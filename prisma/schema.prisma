@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Chord {
+  id         String        @id @default(cuid())
+  name       String
+  sortOrder  Float         @default(0)
+  baseFret   Int           @default(1)
+  difficulty Int?
+  notes      String?
+  strings    ChordString[]
+  barres     Barre[]
+  deckChords DeckChord[]
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+model ChordString {
+  id        String  @id @default(cuid())
+  chordId   String
+  chord     Chord   @relation(fields: [chordId], references: [id], onDelete: Cascade)
+  stringNum Int
+  fret      Int?
+  finger    Int?
+  muted     Boolean @default(false)
+
+  @@unique([chordId, stringNum])
+}
+
+model Barre {
+  id         String @id @default(cuid())
+  chordId    String
+  chord      Chord  @relation(fields: [chordId], references: [id], onDelete: Cascade)
+  fret       Int
+  finger     Int
+  fromString Int
+  toString   Int
+
+  @@index([chordId])
+}
+
+model Deck {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  description String?
+  deckChords  DeckChord[]
+  createdAt   DateTime    @default(now())
+}
+
+model DeckChord {
+  deckId  String
+  chordId String
+  deck    Deck   @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  chord   Chord  @relation(fields: [chordId], references: [id], onDelete: Cascade)
+
+  @@id([deckId, chordId])
+}
