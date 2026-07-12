@@ -1,17 +1,35 @@
+import { useQueryClient } from "@tanstack/react-query";
 import {
 	createFileRoute,
 	useNavigate,
 	useRouterState,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { z } from "zod";
 
 import { ChordDiagram } from "@/components/chord-diagram";
-import { listChords } from "@/lib/server/chords";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { listChords } from "@/lib/server/chords";
+import { absoluteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/chords/")({
+	head: () => {
+		const title = "Acordes de violão e guitarra — ChordDeck";
+		const description =
+			"Biblioteca de acordes de violão e guitarra com diagramas nítidos e digitação de cada acorde. Busque pelo nome e aprenda a posição na hora.";
+		return {
+			meta: [
+				{ title },
+				{ name: "description", content: description },
+				{ property: "og:title", content: title },
+				{ property: "og:description", content: description },
+				{ property: "og:url", content: absoluteUrl("/chords") },
+			],
+			links: [{ rel: "canonical", href: absoluteUrl("/chords") }],
+		};
+	},
 	validateSearch: z.object({ q: z.string().optional() }),
 	loaderDeps: ({ search }) => ({ q: search.q }),
 	loader: ({ deps }) => listChords({ data: { query: deps.q } }),
@@ -25,6 +43,20 @@ function ChordsPage() {
 	const isLoading = useRouterState({ select: (state) => state.isLoading });
 	const hasSearch = Boolean(q?.trim());
 	const search = q ?? "";
+	const queryClient = useQueryClient();
+	
+	useEffect(() => {
+		const qStr = q?.trim();
+		
+		const t = setTimeout(() => {
+			void queryClient.prefetchQuery({
+				queryKey: ["chords", qStr ?? ""],
+				queryFn: () => listChords({ data: { query: qStr } }),
+			});
+		}, 250);
+		
+		return () => clearTimeout(t);
+	}, [q, queryClient]);
 
 	return (
 		<div className="flex flex-col gap-6">
@@ -39,7 +71,10 @@ function ChordsPage() {
 				value={search}
 				onChange={(event) => {
 					void navigate({
-						search: (prev) => ({ ...prev, q: event?.target?.value ?? undefined }),
+						search: (prev) => ({
+							...prev,
+							q: event?.target?.value ?? undefined,
+						}),
 						replace: true,
 					});
 				}}

@@ -7,7 +7,6 @@ import {
 } from '../src/lib/chord-notation'
 import { PrismaClient } from './generated/client.js'
 
-
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
 })
@@ -275,6 +274,244 @@ const minorChords: SeedChord[] = [
   },
 ]
 
+const majorSeventhChords: SeedChord[] = [
+  {
+    name: 'C7',
+    sortOrder: 1,
+    notation: 'x32310',
+    baseFret: 1,
+    difficulty: 2,
+    notes: 'Dó maior com sétima aberto.',
+    fingers: { 2: 3, 3: 2, 4: 4, 5: 1 },
+  },
+  {
+    name: 'C#7',
+    sortOrder: 1.1,
+    notation: 'x46464',
+    baseFret: 4,
+    difficulty: 4,
+    notes: 'Dó sustenido maior com sétima e pestana na 4ª casa.',
+    fingers: { 2: 1, 3: 3, 4: 1, 5: 4, 6: 1 },
+    barres: [{ fret: 4, finger: 1, fromString: 2, toString: 6 }],
+  },
+  {
+    name: 'D7',
+    sortOrder: 2,
+    notation: 'xx0212',
+    baseFret: 1,
+    difficulty: 2,
+    notes: 'Ré maior com sétima aberto.',
+    fingers: { 4: 2, 5: 1, 6: 3 },
+  },
+  {
+    name: 'D#7',
+    sortOrder: 2.1,
+    notation: 'x68686',
+    baseFret: 6,
+    difficulty: 4,
+    notes: 'Ré sustenido maior com sétima e pestana na 6ª casa.',
+    fingers: { 2: 1, 3: 3, 4: 1, 5: 4, 6: 1 },
+    barres: [{ fret: 6, finger: 1, fromString: 2, toString: 6 }],
+  },
+  {
+    name: 'E7',
+    sortOrder: 3,
+    notation: '020100',
+    baseFret: 1,
+    difficulty: 1,
+    notes: 'Mi maior com sétima aberto.',
+    fingers: { 2: 2, 4: 1 },
+  },
+  {
+    name: 'F7',
+    sortOrder: 4,
+    notation: '131211',
+    baseFret: 1,
+    difficulty: 4,
+    notes: 'Fá maior com sétima e pestana na 1ª casa.',
+    fingers: { 1: 1, 2: 3, 3: 1, 4: 2, 5: 1, 6: 1 },
+    barres: [{ fret: 1, finger: 1, fromString: 1, toString: 6 }],
+  },
+  {
+    name: 'F#7',
+    sortOrder: 4.1,
+    notation: '242322',
+    baseFret: 2,
+    difficulty: 4,
+    notes: 'Fá sustenido maior com sétima e pestana na 2ª casa.',
+    fingers: { 1: 1, 2: 3, 3: 1, 4: 2, 5: 1, 6: 1 },
+    barres: [{ fret: 2, finger: 1, fromString: 1, toString: 6 }],
+  },
+  {
+    name: 'G7',
+    sortOrder: 5,
+    notation: '320001',
+    baseFret: 1,
+    difficulty: 2,
+    notes: 'Sol maior com sétima aberto.',
+    fingers: { 1: 3, 2: 2, 6: 1 },
+  },
+  {
+    name: 'G#7',
+    sortOrder: 5.1,
+    notation: '464544',
+    baseFret: 4,
+    difficulty: 4,
+    notes: 'Sol sustenido maior com sétima e pestana na 4ª casa.',
+    fingers: { 1: 1, 2: 3, 3: 1, 4: 2, 5: 1, 6: 1 },
+    barres: [{ fret: 4, finger: 1, fromString: 1, toString: 6 }],
+  },
+  {
+    name: 'A7',
+    sortOrder: 6,
+    notation: 'x02020',
+    baseFret: 1,
+    difficulty: 1,
+    notes: 'Lá maior com sétima aberto.',
+    fingers: { 3: 2, 5: 3 },
+  },
+  {
+    name: 'A#7',
+    sortOrder: 6.1,
+    notation: 'x13131',
+    baseFret: 1,
+    difficulty: 4,
+    notes: 'Lá sustenido maior com sétima e pestana na 1ª casa.',
+    fingers: { 2: 1, 3: 3, 4: 1, 5: 4, 6: 1 },
+    barres: [{ fret: 1, finger: 1, fromString: 2, toString: 6 }],
+  },
+  {
+    name: 'B7',
+    sortOrder: 7,
+    notation: 'x21202',
+    baseFret: 1,
+    difficulty: 3,
+    notes: 'Si maior com sétima aberto.',
+    fingers: { 2: 2, 3: 1, 4: 3, 6: 4 },
+  },
+]
+
+const minorSeventhChords: SeedChord[] = [
+  {
+    name: 'Cm7',
+    sortOrder: 1.1,
+    notation: 'x35343',
+    baseFret: 3,
+    difficulty: 4,
+    notes: 'Dó menor com sétima e pestana na 3ª casa.',
+    fingers: { 2: 1, 3: 3, 4: 1, 5: 2, 6: 1 },
+    barres: [{ fret: 3, finger: 1, fromString: 2, toString: 6 }],
+  },
+  {
+    name: 'C#m7',
+    sortOrder: 1.2,
+    notation: 'x46454',
+    baseFret: 4,
+    difficulty: 4,
+    notes: 'Dó sustenido menor com sétima e pestana na 4ª casa.',
+    fingers: { 2: 1, 3: 3, 4: 1, 5: 2, 6: 1 },
+    barres: [{ fret: 4, finger: 1, fromString: 2, toString: 6 }],
+  },
+  {
+    name: 'Dm7',
+    sortOrder: 2.1,
+    notation: 'xx0211',
+    baseFret: 1,
+    difficulty: 2,
+    notes: 'Ré menor com sétima aberto.',
+    fingers: { 4: 2, 5: 1, 6: 1 },
+    barres: [{ fret: 1, finger: 1, fromString: 5, toString: 6 }],
+  },
+  {
+    name: 'D#m7',
+    sortOrder: 2.2,
+    notation: 'x68676',
+    baseFret: 6,
+    difficulty: 4,
+    notes: 'Ré sustenido menor com sétima e pestana na 6ª casa.',
+    fingers: { 2: 1, 3: 3, 4: 1, 5: 2, 6: 1 },
+    barres: [{ fret: 6, finger: 1, fromString: 2, toString: 6 }],
+  },
+  {
+    name: 'Em7',
+    sortOrder: 3,
+    notation: '020000',
+    baseFret: 1,
+    difficulty: 1,
+    notes: 'Mi menor com sétima aberto.',
+    fingers: { 2: 2 },
+  },
+  {
+    name: 'Fm7',
+    sortOrder: 4,
+    notation: '131111',
+    baseFret: 1,
+    difficulty: 4,
+    notes: 'Fá menor com sétima e pestana na 1ª casa.',
+    fingers: { 1: 1, 2: 3, 3: 1, 4: 1, 5: 1, 6: 1 },
+    barres: [{ fret: 1, finger: 1, fromString: 1, toString: 6 }],
+  },
+  {
+    name: 'F#m7',
+    sortOrder: 4.1,
+    notation: '242222',
+    baseFret: 2,
+    difficulty: 4,
+    notes: 'Fá sustenido menor com sétima e pestana na 2ª casa.',
+    fingers: { 1: 1, 2: 3, 3: 1, 4: 1, 5: 1, 6: 1 },
+    barres: [{ fret: 2, finger: 1, fromString: 1, toString: 6 }],
+  },
+  {
+    name: 'Gm7',
+    sortOrder: 5.1,
+    notation: '353333',
+    baseFret: 3,
+    difficulty: 4,
+    notes: 'Sol menor com sétima e pestana na 3ª casa.',
+    fingers: { 1: 1, 2: 3, 3: 1, 4: 1, 5: 1, 6: 1 },
+    barres: [{ fret: 3, finger: 1, fromString: 1, toString: 6 }],
+  },
+  {
+    name: 'G#m7',
+    sortOrder: 5.2,
+    notation: '464444',
+    baseFret: 4,
+    difficulty: 4,
+    notes: 'Sol sustenido menor com sétima e pestana na 4ª casa.',
+    fingers: { 1: 1, 2: 3, 3: 1, 4: 1, 5: 1, 6: 1 },
+    barres: [{ fret: 4, finger: 1, fromString: 1, toString: 6 }],
+  },
+  {
+    name: 'Am7',
+    sortOrder: 6,
+    notation: 'x02010',
+    baseFret: 1,
+    difficulty: 1,
+    notes: 'Lá menor com sétima aberto.',
+    fingers: { 3: 2, 5: 1 },
+  },
+  {
+    name: 'A#m7',
+    sortOrder: 6.1,
+    notation: 'x13121',
+    baseFret: 1,
+    difficulty: 4,
+    notes: 'Lá sustenido menor com sétima e pestana na 1ª casa.',
+    fingers: { 2: 1, 3: 3, 4: 1, 5: 2, 6: 1 },
+    barres: [{ fret: 1, finger: 1, fromString: 2, toString: 6 }],
+  },
+  {
+    name: 'Bm7',
+    sortOrder: 7,
+    notation: 'x24232',
+    baseFret: 2,
+    difficulty: 4,
+    notes: 'Si menor com sétima e pestana na 2ª casa.',
+    fingers: { 2: 1, 3: 3, 4: 1, 5: 2, 6: 1 },
+    barres: [{ fret: 2, finger: 1, fromString: 2, toString: 6 }],
+  },
+]
+
 function stringsWithFingers(chord: SeedChord): StringPos[] {
   return parseNotation(chord.notation).map((string) => ({
     ...string,
@@ -327,6 +564,46 @@ async function main() {
     ),
   )
 
+  const majorSeventhChordsCreated = await Promise.all(
+    majorSeventhChords.map((chord) =>
+      prisma.chord.create({
+        data: {
+          name: chord.name,
+          sortOrder: chord.sortOrder,
+          baseFret: chord.baseFret,
+          difficulty: chord.difficulty,
+          notes: chord.notes,
+          strings: {
+            create: stringsWithFingers(chord),
+          },
+          barres: {
+            create: chord.barres ?? [],
+          },
+        },
+      }),
+    ),
+  )
+
+  const minorSeventhChordsCreated = await Promise.all(
+    minorSeventhChords.map((chord) =>
+      prisma.chord.create({
+        data: {
+          name: chord.name,
+          sortOrder: chord.sortOrder,
+          baseFret: chord.baseFret,
+          difficulty: chord.difficulty,
+          notes: chord.notes,
+          strings: {
+            create: stringsWithFingers(chord),
+          },
+          barres: {
+            create: chord.barres ?? [],
+          },
+        },
+      }),
+    ),
+  )
+
   await prisma.deck.create({
     data: {
       slug: 'acordes-menores',
@@ -347,6 +624,32 @@ async function main() {
       description: 'Deck com os acordes maiores do violão.',
       deckChords: {
         create: majorChordsCreated.map((chord) => ({
+          chord: { connect: { id: chord.id } },
+        })),
+      },
+    },
+  })
+
+  await prisma.deck.create({
+    data: {
+      slug: 'acordes-maiores-setima',
+      name: 'Acordes maiores com sétima',
+      description: 'Deck com os acordes maiores com sétima do violão.',
+      deckChords: {
+        create: majorSeventhChordsCreated.map((chord) => ({
+          chord: { connect: { id: chord.id } },
+        })),
+      },
+    },
+  })
+
+  await prisma.deck.create({
+    data: {
+      slug: 'acordes-menores-setima',
+      name: 'Acordes menores com sétima',
+      description: 'Deck com os acordes menores com sétima do violão.',
+      deckChords: {
+        create: minorSeventhChordsCreated.map((chord) => ({
           chord: { connect: { id: chord.id } },
         })),
       },

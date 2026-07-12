@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chord-deck.vercel.app/sitemap.xml
