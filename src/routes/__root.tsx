@@ -47,6 +47,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				name: "theme-color",
 				content: "#328f97",
 			},
+			{ name: "apple-mobile-web-app-capable", content: "yes" },
+			{ name: "apple-mobile-web-app-title", content: "ChordDeck" },
+			{
+				name: "apple-mobile-web-app-status-bar-style",
+				content: "black-translucent",
+			},
 			{ property: "og:type", content: "website" },
 			{ property: "og:site_name", content: SITE_NAME },
 			{ property: "og:locale", content: "pt_BR" },
@@ -72,8 +78,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				type: "image/svg+xml",
 				href: "/favicon.svg",
 			},
+			{ rel: "manifest", href: "/manifest.webmanifest" },
+			{ rel: "apple-touch-icon", href: "/icons/icon-192.png" },
 		],
 		scripts: [
+			{
+				children:
+					"if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})})}",
+			},
 			{
 				type: "application/ld+json",
 				children: JSON.stringify({
