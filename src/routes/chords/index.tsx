@@ -1,16 +1,16 @@
-import { useQueryClient } from "@tanstack/react-query";
 import {
 	createFileRoute,
 	useNavigate,
 	useRouterState,
 } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 import { ChordDiagram } from "@/components/chord-diagram";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { listChords } from "@/lib/server/chords";
 import { absoluteUrl } from "@/lib/site";
 
@@ -42,21 +42,18 @@ function ChordsPage() {
 	const navigate = useNavigate({ from: Route.fullPath });
 	const isLoading = useRouterState({ select: (state) => state.isLoading });
 	const hasSearch = Boolean(q?.trim());
-	const search = q ?? "";
-	const queryClient = useQueryClient();
-	
+	const [input, setInput] = useState(q ?? "");
+	const debounced = useDebouncedValue(input, 300);
+
 	useEffect(() => {
-		const qStr = q?.trim();
-		
-		const t = setTimeout(() => {
-			void queryClient.prefetchQuery({
-				queryKey: ["chords", qStr ?? ""],
-				queryFn: () => listChords({ data: { query: qStr } }),
-			});
-		}, 250);
-		
-		return () => clearTimeout(t);
-	}, [q, queryClient]);
+		const next = debounced.trim() ? debounced : undefined;
+		if ((q ?? "") === (next ?? "")) return;
+
+		void navigate({
+			search: (prev) => ({ ...prev, q: next }),
+			replace: true,
+		});
+	}, [debounced]);
 
 	return (
 		<div className="flex flex-col gap-6">
@@ -68,16 +65,8 @@ function ChordsPage() {
 			</div>
 
 			<Input
-				value={search}
-				onChange={(event) => {
-					void navigate({
-						search: (prev) => ({
-							...prev,
-							q: event?.target?.value ?? undefined,
-						}),
-						replace: true,
-					});
-				}}
+				value={input}
+				onChange={(event) => setInput(event.target.value)}
 				placeholder="Buscar acorde por nome..."
 				aria-label="Buscar acorde por nome"
 			/>
@@ -99,7 +88,7 @@ function ChordsPage() {
 				</div>
 			) : chords.length === 0 ? (
 				<div className="rounded-lg border border-dashed py-16 text-center text-muted-foreground">
-					Nenhum acorde encontrado para "{search}".
+					Nenhum acorde encontrado para "{q ?? input}".
 				</div>
 			) : (
 				<div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4">
